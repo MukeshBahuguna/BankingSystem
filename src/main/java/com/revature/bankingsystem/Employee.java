@@ -36,9 +36,9 @@ public class Employee {
 				case 2:
 					deleteCustomerAccount();
 					break;
-				case 3:
-					updateCustomerDetails();
-					break;
+//				case 3:
+//					updateCustomerDetails();
+//					break;
 				default :
 					break;
 				}
@@ -67,36 +67,36 @@ public class Employee {
 		s.close();
 	}
 	
-	public void updateCustomerDetails() {
-		// TODO Auto-generated method stub
-		
-		System.out.println("Type customer's id for which you want to update the details...");
-		Scanner s= new Scanner(System.in);
-		System.out.print("Id :");
-		int id= s.nextInt();
-		s.nextLine();
-		
-		System.out.println("Enter the new name: ");
-		String nname= s.nextLine();
-
-		System.out.println("Phone");
-		String nphone =s.nextLine();
-		
-		System.out.print("Password :");
-		String npass= s.nextLine();
-		
-		
-		Statement st;
-		try {
-			st=DBConfigure.DBConnection().createStatement();	
-			st.executeQuery(" update from customer set cust_name="+nname+" ,cust_phone="+nphone+" , cust_pass="+npass+"  where cust_id="+id+" ");
-			System.out.println("Sucessfully deleted customer with id = "+id);
-	
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-	}
+//	public void updateCustomerDetails() {
+//		// TODO Auto-generated method stub
+//		
+//		System.out.println("Type customer's id for which you want to update the details...");
+//		Scanner s= new Scanner(System.in);
+//		System.out.print("Id :");
+//		int id= s.nextInt();
+//
+//		System.out.print("Enter the new name: ");
+//		String nname= s.next();
+//
+//		System.out.print("Phone : ");
+//		String nphone =s.next();
+//		
+//		System.out.print("Password :");
+//		String npass= s.next();
+//		if(validAccountDetails(nname,nphone))
+//		{
+//			
+//			Statement st;
+//			try {
+//				st=DBConfigure.DBConnection().createStatement();	
+//				st.executeQuery(" update from customer set cust_name='"+nname+"' ,cust_phone='"+nphone+" ', cust_pass='"+npass+"'  where cust_id="+id+" ");
+//				System.out.println("Sucessfully deleted customer with id = "+id+" ");
+//		
+//			}catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 
 	public void deleteCustomerAccount() {
 		// TODO Auto-generated method stub
