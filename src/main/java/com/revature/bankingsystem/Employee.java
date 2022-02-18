@@ -5,7 +5,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Employee {
+	Logger logger = LogManager.getLogger(Employee.class);
 	
 	public void login() {
 		System.out.println("Type your id to login as an employee");
@@ -24,27 +28,29 @@ public class Employee {
 			ResultSet rs= st.executeQuery("select * from employee where emp_id="+id+" ");
 			if(rs.next() && rs.getString("emp_pass").equals(pass) ) {
 				System.out.println("You have successfully logged in ");
-				System.out.println("Welcome "+rs.getString("emp_name"));
-				
-				System.out.println("Type a number");
-
-				int choice= s.nextInt();
-				switch(choice) {
-				case 1: 
-					viewCustomerAccount();
-					break;	
-				case 2:
-					deleteCustomerAccount();
-					break;
-//				case 3:
-//					updateCustomerDetails();
-//					break;
-				default :
-					break;
-				}
+				System.out.println("**********Welcome "+rs.getString("emp_name")+"*********\n");
+				int choice;
+				do {
+					System.out.println("To view customer's details     type => 1");
+					System.out.println("To delete customer's account   type => 2");
+					System.out.println("To Exit                        type => 3");
+	
+					choice= s.nextInt();
+					switch(choice) {
+					case 1: 
+						viewCustomerAccount();
+						break;	
+					case 2:
+						deleteCustomerAccount();
+						break;
+					default :
+						break;
+					}
+				}while (choice!=3);
 				
 			}
 			else {
+				logger.error("Error during Employee log in ->Either Id does not exist 😒 or Password does not match");
 				System.out.println("Either Id does not exist 😒 or Password does not match ☹ Try again");
 				System.out.println("Press y to enter details again");
 				System.out.println("Press n to exit");
@@ -64,39 +70,9 @@ public class Employee {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		s.close();
 	}
 	
-//	public void updateCustomerDetails() {
-//		// TODO Auto-generated method stub
-//		
-//		System.out.println("Type customer's id for which you want to update the details...");
-//		Scanner s= new Scanner(System.in);
-//		System.out.print("Id :");
-//		int id= s.nextInt();
-//
-//		System.out.print("Enter the new name: ");
-//		String nname= s.next();
-//
-//		System.out.print("Phone : ");
-//		String nphone =s.next();
-//		
-//		System.out.print("Password :");
-//		String npass= s.next();
-//		if(validAccountDetails(nname,nphone))
-//		{
-//			
-//			Statement st;
-//			try {
-//				st=DBConfigure.DBConnection().createStatement();	
-//				st.executeQuery(" update from customer set cust_name='"+nname+"' ,cust_phone='"+nphone+" ', cust_pass='"+npass+"'  where cust_id="+id+" ");
-//				System.out.println("Sucessfully deleted customer with id = "+id+" ");
-//		
-//			}catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
+
 
 	public void deleteCustomerAccount() {
 		// TODO Auto-generated method stub
@@ -109,8 +85,15 @@ public class Employee {
 		Statement st;
 		try {
 			st=DBConfigure.DBConnection().createStatement();	
-			st.executeQuery(" delete from customer where cust_id="+id+" ");
-			System.out.println("Sucessfully deleted customer with id = "+id);
+			int n=st.executeUpdate(" delete from customer where cust_id="+id+" ");
+			if (n!=0){
+				System.out.println("Sucessfully deleted customer with id = "+id);
+				logger.info("Sucessfully deleted customer with id = "+id+"");
+			}
+			else {
+				System.out.println("Table empty or id does not Exist!\n");
+			}
+			
 	
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -119,14 +102,16 @@ public class Employee {
 		
 	}
 
-	public void viewCustomerAccount() {
+	public void viewCustomerAccount() { //here
 		Statement st;
 		try {
 			st=DBConfigure.DBConnection().createStatement();	
 			ResultSet rs= st.executeQuery(" select * from customer limit 5 ");
 			while(rs.next()) {
-				System.out.println("Id: "+ rs.getInt("cust_id") +",  Name: " +rs.getString("cust_name") + ",  Phone: "+ rs.getString("cust_phone"));
+				System.out.println("Id: " + rs.getInt("cust_id") + ",  Name: " + rs.getString("cust_name") + 
+						",  Phone: " + rs.getString("cust_phone") + ", balance: " +rs.getInt("balance") );
 			}
+			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
 	
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -134,6 +119,10 @@ public class Employee {
 	}
 	
 	public static boolean validAccountDetails(String customerName , String phNo) {
+		return validPhoneNo(phNo) && validNameC(customerName);
+	}
+
+	public static boolean validPhoneNo(String phNo) {
 		if (phNo.length() != 10) {
 			System.out.println("Phone number should contain 10 numbers");
 			return false;
@@ -144,7 +133,10 @@ public class Employee {
 				return false;
 			}
 		}
-		
+		return true;
+	}
+	
+	public static boolean validNameC(String customerName ) {
 		for (int i=0 ; i <customerName.length() ; i++) {
 			char chr=customerName.charAt(i);
 			if (!Character.isLetter(chr)) {
@@ -153,12 +145,7 @@ public class Employee {
 			}
 		}
 		return true;
-		
 	}
-	
-	
-	
-	
 	
 	
 }

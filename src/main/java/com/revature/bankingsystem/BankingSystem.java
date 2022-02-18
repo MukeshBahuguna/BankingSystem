@@ -1,31 +1,27 @@
 package com.revature.bankingsystem;
 
+
 import java.util.*;
 
-
-//project
 public class BankingSystem {
-
-
-	public void viewLog() {
-		
-	}
-	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Scanner s =new Scanner(System.in);
 		System.out.println("|~~~~~~~~~~~~~~~~~~~~WELCOME TO JAVA BANKING~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
 		int choice;
 		do {
-			System.out.println("To login as an Existing User type => 1");
+			System.out.println("|~~~~~~~~~~~~~~~~~~~~WELCOME TO MAIN MENU~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
+		
+			System.out.println("-> To login as an Existing User type => 1");
 			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
-			System.out.println("To Register as a NEW USER    type => 2");
+			System.out.println("-> To Register as a NEW USER    type => 2");
 			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
-			System.out.println("To login as an Employee      type => 3");
+			System.out.println("-> To login as an Employee      type => 3");
+			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
+			System.out.println("-> To Exit                      type => 4");
 			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
 			
 			choice= s.nextInt(); 
-		
 			switch (choice) {
 			case 1:
 				Customer c=new Customer();
@@ -44,17 +40,14 @@ public class BankingSystem {
 				System.out.println("|~~~~~~~~~~~~~~~~~~~~WELCOME TO EMPLOYEE LOGIN PAGE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
 				e.login();
 				break;
-				
-			case 4:
-				break;
-				
+	
 			default :
-				System.out.println("Please choose a valid option");
+//				System.out.println("Please choose a valid option");
 				break;
 			}
 		}while (choice!=4);
 		System.out.println("Thank You For using Java Banking");
-
+		s.close();
 		
 	}
 
